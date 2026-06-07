@@ -28,3 +28,8 @@ Thumbs.db
 *.temp
 __pycache__/
 *.pyc
+
+# Selenium相关
+chromedriver.exe
+geckodriver.exe
+*.crx

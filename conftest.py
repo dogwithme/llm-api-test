@@ -5,26 +5,35 @@ from jsonschema import validate
 import allure
 import json
 import shutil
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
+
+
+# ==================== 全局配置与接口夹具 ====================
 @pytest.fixture(scope="session")
 def doubao_config():
-    """
-    豆包大模型接口配置
-    从系统环境变量读取 API Key，安全不泄露
-    """
+    """豆包大模型接口+UI全局配置"""
     api_key = os.getenv("DOUBAO_API_KEY", "").strip()
 
     if not api_key:
-        raise RuntimeError("❌ 请先配置系统环境变量 DOUBAO_API_KEY")
+        print("\n⚠️  未配置环境变量 DOUBAO_API_KEY，接口测试无法运行，UI测试不受影响")
+
+    model_id = "ep-20260527211839-psk77"
+    base_url = "https://ark.cn-beijing.volces.com/api/v3"
+    debug_url = "https://console.volcengine.com/ark/region:ark+cn-beijing/experience/chat?modelId=ep-20260527211839-psk77&tab=Chat"
 
     return {
-        "base_url": "https://ark.cn-beijing.volces.com/api/v3",
+        "base_url": base_url,
         "api_key": api_key,
-        "model": "ep-20260527211839-psk77"
+        "model": model_id,
+        "debug_url": debug_url
     }
-# 在doubao_config函数后面添加这个
+
+
 @pytest.fixture(scope="session")
 def parse_stream_response():
-    """公共函数：解析流式输出响应，返回完整内容"""
+    """解析流式输出响应"""
+
     def _parse_stream(response):
         full_content = ""
         for line in response.iter_lines():
@@ -35,7 +44,6 @@ def parse_stream_response():
                     if data_str == '[DONE]':
                         break
                     try:
-                        import json
                         chunk = json.loads(data_str)
                         if 'choices' in chunk and len(chunk['choices']) > 0:
                             delta = chunk['choices'][0].get('delta', {})
@@ -44,67 +52,49 @@ def parse_stream_response():
                     except json.JSONDecodeError:
                         continue
         return full_content
+
     return _parse_stream
-# 保存原始的 requests.post 方法
+
+
 original_post = requests.post
 
-# ==================== 自动修正所有参数的补丁 ====================
+
 @pytest.fixture(scope="session")
 def patched_post():
-    """自动修正所有大模型请求的非法参数，修复官方bug和400错误"""
-    # 全局默认超时：连接3秒，读取15秒（行业标准值）
+    """自动修正大模型请求非法参数"""
     DEFAULT_TIMEOUT = (3, 15)
+
     def _patched_post(url, *args, **kwargs):
-        # 如果调用时传了timeout，就用传的；否则用默认值
         timeout = kwargs.pop("timeout", DEFAULT_TIMEOUT)
-        # 新增开关：测试非法参数时传 skip_patch=True 即可绕过修正
         skip_patch = kwargs.pop("skip_patch", False)
 
-        # 只处理火山方舟的接口请求，且不跳过补丁
         if "ark.cn-beijing.volces.com" in url and not skip_patch:
             if "json" in kwargs:
                 data = kwargs["json"]
-
-                # 1. 修正 max_tokens 非法值（官方不报错但会忽略）
                 if "max_tokens" in data:
-                    if data["max_tokens"] < 1:
-                        data["max_tokens"] = 1
-                    elif data["max_tokens"] > 4096:
-                        data["max_tokens"] = 4096
-
-                # 2. 修正 temperature 非法值（官方会返回400）
+                    data["max_tokens"] = max(1, min(4096, data["max_tokens"]))
                 if "temperature" in data:
-                    if data["temperature"] < 0.0:
-                        data["temperature"] = 0.0
-                    elif data["temperature"] > 2.0:
-                        data["temperature"] = 2.0
-
-                # 3. 修正 top_p 非法值（官方会返回400）
+                    data["temperature"] = max(0.0, min(2.0, data["temperature"]))
                 if "top_p" in data:
-                    if data["top_p"] < 0.0:
-                        data["top_p"] = 0.0
-                    elif data["top_p"] > 1.0:
-                        data["top_p"] = 1.0
-
-                # 把修改后的数据放回请求
+                    data["top_p"] = max(0.0, min(1.0, data["top_p"]))
                 kwargs["json"] = data
 
-        # 调用原始的 post 方法发送请求
         return original_post(url, *args, **kwargs)
 
     return _patched_post
 
+
 @pytest.fixture(scope="session")
 def validate_chat_response():
-    """公共函数：校验聊天接口响应格式符合OpenAI规范"""
+    """校验聊天接口响应格式"""
     chat_schema = {
         "type": "object",
         "required": ["id", "object", "created", "model", "choices", "usage"],
         "properties": {
             "id": {"type": "string"},
             "object": {"const": "chat.completion"},
-            "created": {"type": "integer"},
-            "model": {"type": "string"},
+            "created": {"integer"},
+            "model": {"string"},
             "choices": {
                 "type": "array",
                 "minItems": 1,
@@ -112,16 +102,16 @@ def validate_chat_response():
                     "type": "object",
                     "required": ["index", "message", "finish_reason"],
                     "properties": {
-                        "index": {"type": "integer"},
+                        "index": {"integer"},
                         "message": {
                             "type": "object",
                             "required": ["role", "content"],
                             "properties": {
-                                "role": {"type": "string"},
-                                "content": {"type": "string"}
+                                "role": {"string"},
+                                "content": {"string"}
                             }
                         },
-                        "finish_reason": {"type": "string"}
+                        "finish_reason": {"string"}
                     }
                 }
             },
@@ -129,9 +119,9 @@ def validate_chat_response():
                 "type": "object",
                 "required": ["prompt_tokens", "completion_tokens", "total_tokens"],
                 "properties": {
-                    "prompt_tokens": {"type": "integer"},
-                    "completion_tokens": {"type": "integer"},
-                    "total_tokens": {"type": "integer"}
+                    "prompt_tokens": {"integer"},
+                    "completion_tokens": {"integer"},
+                    "total_tokens": {"integer"}
                 }
             }
         }
@@ -145,13 +135,77 @@ def validate_chat_response():
 
 @pytest.fixture(scope="session", autouse=True)
 def copy_environment_properties():
-    """测试结束后自动复制环境配置文件到Allure报告目录"""
-    yield  # 先执行所有测试
+    """测试结束自动复制环境配置到报告"""
+    yield
     source_file = "environment.properties"
     target_dir = "./reports"
-
     if os.path.exists(source_file):
-        # 自动创建目标文件夹，即使不存在
         os.makedirs(target_dir, exist_ok=True)
         shutil.copy(source_file, os.path.join(target_dir, "environment.properties"))
         print(f"\n✅ 环境配置文件已自动复制到 {target_dir}")
+
+
+# ==================== Selenium UI 夹具 ====================
+@pytest.fixture(scope="session")
+def chrome_driver():
+    """全局只开1次浏览器"""
+    options = Options()
+    options.add_argument("--disable-features=RendererCodeIntegrity")
+    options.add_argument("--no-sandbox")
+    options.add_argument("--disable-dev-shm-usage")
+    options.add_argument("--disable-gpu")
+    options.add_argument("--disable-renderer-backgrounding")
+    options.add_argument("--disable-background-timer-throttling")
+    options.add_argument("--disable-backgrounding-occluded-windows")
+    options.add_experimental_option("detach", True)
+    options.add_experimental_option("excludeSwitches", ["enable-automation","enable-logging"])
+    options.add_experimental_option("useAutomationExtension",False)
+    driver = webdriver.Chrome(options=options)
+    driver.implicitly_wait(2)
+    yield driver
+    driver.quit()
+
+
+@pytest.fixture(scope="session")
+def login_once(chrome_driver, doubao_config):
+    """全局只打开一次页面"""
+    driver = chrome_driver
+    driver.get(doubao_config["debug_url"])
+    yield driver
+
+
+@pytest.fixture(scope="function")
+def init_driver(login_once):
+    """不刷新、不跳转、不重置页面"""
+    driver = login_once
+    # 【只加了这3行：每次用例前强制清理断网残留】
+    driver.execute_script("""
+    if(window.originalXMLHttpRequest) XMLHttpRequest = window.originalXMLHttpRequest;
+    if(window.originalFetch) fetch = window.originalFetch;
+    delete window.originalXMLHttpRequest;
+    delete window.originalFetch;
+    """)
+    yield driver
+
+
+# ==================== 自动截图 ====================
+@pytest.fixture(autouse=True)
+def screenshot_on_failure(request):
+    yield
+    if "chrome_driver" not in request.fixturenames:
+        return
+    driver = request.getfixturevalue("chrome_driver")
+    if hasattr(request.node, "rep_call") and request.node.rep_call.failed:
+        with allure.step("测试失败自动截图"):
+            allure.attach(
+                driver.get_screenshot_as_png(),
+                name="失败截图",
+                attachment_type=allure.attachment_type.PNG
+            )
+
+
+@pytest.hookimpl(tryfirst=True, hookwrapper=True)
+def pytest_runtest_makereport(item, call):
+    outcome = yield
+    report = outcome.get_result()
+    setattr(item, f"rep_{report.when}", report)

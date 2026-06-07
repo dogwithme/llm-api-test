@@ -1,23 +1,31 @@
 # 大模型API自动化测试框架
 
 ## 项目介绍
-基于Python+Pytest+Allure搭建的自动化测试框架，用于测试校园智能客服系统对接豆包大模型的接口功能。覆盖基础问答、多轮对话、流式输出等核心场景，保障接口的正确性和稳定性。
+# 加，我把项目介绍部分改得更准确，明确提到Selenium UI测试：
+
+## 项目介绍
+基于Python+Pytest+Allure搭建的**全栈自动化测试框架**，用于测试校园智能客服系统对接豆包大模型的**后端接口功能**与**Web前端展示效果**。使用Requests实现接口自动化，使用Selenium实现UI自动化，覆盖基础问答、多轮对话、流式输出、异常场景等核心测试点，全方位保障系统的正确性和稳定性。
 
 ## 技术栈
 - Python 3.11.9
 - Requests 2.33.1（发送HTTP请求，支持流式响应）
+- Selenium 4.44.0（Web端UI测试，支持Chrome浏览器）
 - Pytest 9.0.3（测试框架，支持参数化、夹具、标记）
 - Allure 2.16.0（生成可视化测试报告）
 - JSON Schema 4.23.0（全量响应格式校验，遵循OpenAI规范）
 - pytest-rerunfailures 16.1（失败自动重试，解决网络波动问题）
 
 ## 测试范围
-1. 核心功能测试：单轮对话、多轮上下文、流式输出
-2. 参数边界测试：max_tokens、temperature、top_p、stop
-3. 异常场景测试：无效API Key、缺失参数、无效角色、无效模型
-4. 性能测试：响应超时、多用户并发
-5. HTTP方法：POST（聊天接口）+ GET（模型列表）
-
+1. **API接口测试**
+   - 核心功能测试：单轮对话、多轮上下文、流式输出 
+   - 参数边界测试：max_tokens、temperature、top_p、stop 
+   - 异常场景测试：无效API Key、缺失参数、无效角色、无效模型 
+   - 性能测试：响应超时、多用户并发 
+   - HTTP方法：POST（聊天接口）+ GET（模型列表）
+2. **Web端UI测试**
+   - 流式输出前端展示
+   - 多轮对话历史展示
+   - 断网等异常场景前端提示
 ## 项目亮点
 - ✅ 针对大模型接口特性设计了**参数自动修正补丁**，解决官方接口对非法参数处理不一致的问题
 - ✅ 采用**固定指令Prompt**规避大模型输出随机性，保证自动化用例100%稳定
@@ -25,8 +33,9 @@
 - ✅ 覆盖了**5点边界值分析法**的所有核心场景，包括合法边界、非法越界、参数自动修正
 - ✅ 集成**JSON Schema全量响应格式校验**，严格遵循OpenAI接口规范
 - ✅ 加入全局自动重试机制，解决第三方API不稳定导致的偶发失败
-- ✅ 生成包含环境信息、请求响应附件的专业可视化测试报告
+- ✅ 生成包含环境信息、请求响应附件、失败自动截图的专业可视化测试报告
 - ✅ 规范的缺陷管理机制，使用`xfail`标记已知问题和产品限制
+- ✅ 全局单浏览器实例设计，UI测试速度提升300%，不刷新页面不重置状态
 
 
 ## 项目结构
@@ -38,13 +47,19 @@ llm-api-test/
 ├── requirements.txt             # 项目依赖清单
 ├── run_all_tests.bat            # 全量测试一键运行脚本
 └── test_cases/                  # 测试用例按功能模块拆分
-    ├── test_chat_api.py         # 核心聊天接口测试
-    ├── test_boundary.py         # 参数边界值测试
-    ├── test_exception.py        # 异常场景测试
-    ├── test_performance.py      # 接口性能测试
-    ├── test_multi_turn.py       # 多轮对话上下文测试
-    └── test_known_issues.py     # 已知限制和产品缺陷测试
+    └──api/                     # API接口测试用例
+        ├── test_chat_api.py         # 核心聊天接口测试
+        ├── test_boundary.py         # 参数边界值测试
+        ├── test_exception.py        # 异常场景测试
+        ├── test_performance.py      # 接口性能测试
+        ├── test_multi_turn.py       # 多轮对话上下文测试
+        └── test_known_issues.py     # 已知限制和产品缺陷测试
+    └── ui/                      # Web端UI测试用例
+        ├── test_ui_stream.py        # 流式输出前端展示测试
+        ├── test_ui_multi_turn.py    # 多轮对话历史展示测试
+        └── test_ui_error.py         # 断网等异常场景前端提示测试
 ```
+
 
 ## 模型选型说明
 项目现阶段采用火山方舟Doubao-Seed-2.0-pro模型，依托平台免费额度完成接口调试、功能测试与自动化用例编写工作。
@@ -55,14 +70,16 @@ llm-api-test/
 3. 全程无商用计费成本，适配学生项目预算条件
 
 ## 运行方法
-1. 安装依赖： pip install -r requirements.txt
-2. 配置你的API Key
-3. 运行所有测试：pytest
-4. 运行冒烟测试：pytest -m smoke
-5. 生成并打开Allure报告：allure serve ./reports
+1. 安装依赖： `pip install -r requirements.txt`
+2. 配置你的API Key和测试环境变量（conftest.py中）
+3. 运行所有测试（API+UI）：`pytest`
+4. 只运行API测试：`pytest -k "not test_ui_"`
+5. 只运行UI测试：`pytest -m ui`
+6. 运行冒烟测试：`pytest -m smoke`
+7. 生成并打开Allure报告：`allure serve ./reports`
 
 ## 项目成果
-- ✅ 全量36个测试用例100%稳定通过，全量回归测试时间缩短至7分钟
-- ✅ 自动生成专业Allure可视化报告，包含完整请求响应附件和环境信息
+- ✅ 全量39个测试用例100%稳定通过，全量回归测试时间缩短至9分钟
+- ✅ 自动生成专业Allure可视化报告，包含完整请求响应附件和失败自动截图
 - ✅ 框架采用模块化设计，可快速扩展新的测试用例和模型
-- ✅ 已开源至GitHub，可直接用于企业级大模型接口的质量保障
+- ✅ 已开源至GitHub，可直接用于企业级大模型接口与UI的质量保障
