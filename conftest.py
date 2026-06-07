@@ -209,3 +209,22 @@ def pytest_runtest_makereport(item, call):
     outcome = yield
     report = outcome.get_result()
     setattr(item, f"rep_{report.when}", report)
+
+
+def pytest_collection_modifyitems(config, items):
+    # 1. 先给所有API用例标记为最高优先级
+    for item in items:
+        if "test_cases/api/" in item.nodeid:
+            item.add_marker(pytest.mark.order(0))
+
+    # 2. 给所有UI用例按原有的顺序标记
+    order_map = {
+        "test_ui_stream": 1,
+        "test_ui_multi_turn": 2,
+        "test_ui_error": 3
+    }
+    for item in items:
+        for name, order in order_map.items():
+            if name in item.nodeid:
+                item.add_marker(pytest.mark.order(order))
+                break
