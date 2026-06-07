@@ -1,28 +1,30 @@
 @echo off
-chcp 65001 >nul
+chcp 936 >nul 2>&1
+cd /d "%~dp0"
+
 echo ==============================================
-echo          豆包大模型API+UI自动化测试
+echo          Doubao API + UI Automation Test
 echo ==============================================
 echo.
 
-echo [1/4] 正在清理旧的测试报告...
+echo [1/4] Cleaning old test reports...
 if exist reports rmdir /s /q reports
 mkdir reports
-echo 旧报告清理完成
+echo Old reports cleaned.
 echo.
 
-echo [2/4] 正在运行所有测试用例（API+UI）...
-echo 提示：
-echo   - 只运行API测试：pytest -k "not test_ui_"
-echo   - 只运行UI测试：pytest -m ui
-echo   - 关闭自动重试：pytest --no-reruns
+echo [2/4] Running all test cases (API + UI)...
+echo Tips:
+echo   - Only API tests: pytest -k "not test_ui_"
+echo   - Only UI tests: pytest -m ui
+echo   - Disable auto-retry: pytest --no-reruns
 echo.
 pytest
 echo.
-echo 所有测试运行完成
+echo All tests finished.
 echo.
 
-echo [3/4] 正在生成并打开Allure报告...
+echo [3/4] Generating and opening Allure report...
 allure serve ./reports
 echo.
 

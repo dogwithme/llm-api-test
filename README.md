@@ -12,6 +12,9 @@
 - JSON Schema 4.23.0（全量响应格式校验，遵循OpenAI规范）
 - pytest-rerunfailures 16.1（失败自动重试，解决网络波动问题）
 
+## 测试报告
+![Allure测试报告](./reports/allure-report-screenshot.png)
+
 ## 测试范围
 1. **API接口测试**
    - 核心功能测试：单轮对话、多轮上下文、流式输出 
@@ -67,13 +70,22 @@ llm-api-test/
 3. 全程无商用计费成本，适配学生项目预算条件
 
 ## 运行方法
-1. 安装依赖： `pip install -r requirements.txt`
-2. 配置你的API Key和测试环境变量（conftest.py中）
-3. 运行所有测试（API+UI）：`pytest`
-4. 只运行API测试：`pytest -k "not test_ui_"`
-5. 只运行UI测试：`pytest -m ui`
-6. 运行冒烟测试：`pytest -m smoke`
-7. 生成并打开Allure报告：`allure serve ./reports`
+1.  安装依赖：`pip install -r requirements.txt`
+2.  配置你的 API Key 和测试环境变量（在 `conftest.py` 中修改）
+
+### 方式一：一键运行（推荐）
+运行 `run_all_tests.bat`文件，自动执行：API 接口测试 → UI 自动化测试 → 生成并打开 Allure 报告
+
+### 方式二：命令行运行
+1.  运行所有测试（API+UI）：`pytest`
+2.  只运行 API 测试：`pytest -k "not test_ui_"`
+3.  只运行 UI 测试：`pytest -m ui`
+4.  运行冒烟测试：`pytest -m smoke`
+5.  生成并打开 Allure 报告：`allure serve ./reports`
+
+### 执行顺序说明
+框架通过根目录 `conftest.py` 钩子强制排序：
+优先执行全部 API 接口用例，再按预设顺序运行 UI 自动化用例。
 
 ## 项目成果
 - ✅ 全量39个测试用例100%稳定通过，全量回归测试时间缩短至9分钟
@@ -81,6 +93,3 @@ llm-api-test/
 - ✅ 框架采用模块化设计，可快速扩展新的测试用例和模型
 - ✅ 已开源至GitHub，可直接用于企业级大模型接口与UI的质量保障
 
-##  执行顺序说明：
-- 框架通过根目录 conftest.py 钩子强制排序
-- 整体顺序：**全部API接口用例 → 流式输出UI用例 → 多轮对话UI用例 → 异常场景UI用例**

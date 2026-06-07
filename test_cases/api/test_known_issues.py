@@ -78,7 +78,7 @@ def test_long_generation_timeout(doubao_config,validate_chat_response,patched_po
         "max_tokens": 4000
     }
 
-    # 设置3秒超时，这个测试肯定会失败
+    # 设置3秒超时
     try:
         response = patched_post(url, headers=headers, json=data, timeout=3)
         assert response.status_code == 200

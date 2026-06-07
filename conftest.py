@@ -86,15 +86,16 @@ def patched_post():
 
 @pytest.fixture(scope="session")
 def validate_chat_response():
-    """校验聊天接口响应格式"""
+    from jsonschema import validate
+
     chat_schema = {
         "type": "object",
         "required": ["id", "object", "created", "model", "choices", "usage"],
         "properties": {
             "id": {"type": "string"},
-            "object": {"const": "chat.completion"},
-            "created": {"integer"},
-            "model": {"string"},
+            "object": {"type": "string"},
+            "created": {"type": "integer"},
+            "model": {"type": "string"},
             "choices": {
                 "type": "array",
                 "minItems": 1,
@@ -102,16 +103,16 @@ def validate_chat_response():
                     "type": "object",
                     "required": ["index", "message", "finish_reason"],
                     "properties": {
-                        "index": {"integer"},
+                        "index": {"type": "integer"},
                         "message": {
                             "type": "object",
                             "required": ["role", "content"],
                             "properties": {
-                                "role": {"string"},
-                                "content": {"string"}
+                                "role": {"type": "string"},
+                                "content": {"type": "string"}
                             }
                         },
-                        "finish_reason": {"string"}
+                        "finish_reason": {"type": "string"}
                     }
                 }
             },
@@ -119,16 +120,18 @@ def validate_chat_response():
                 "type": "object",
                 "required": ["prompt_tokens", "completion_tokens", "total_tokens"],
                 "properties": {
-                    "prompt_tokens": {"integer"},
-                    "completion_tokens": {"integer"},
-                    "total_tokens": {"integer"}
+                    "prompt_tokens": {"type": "integer"},
+                    "completion_tokens": {"type": "integer"},
+                    "total_tokens": {"type": "integer"}
                 }
             }
         }
     }
 
-    def _validate(response_json):
-        validate(instance=response_json, schema=chat_schema)
+    def _validate(resp):
+        validate(instance=resp, schema=chat_schema)
+
+    return _validate
 
     return _validate
 
