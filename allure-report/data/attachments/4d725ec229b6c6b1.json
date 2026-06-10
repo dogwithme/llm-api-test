@@ -1,0 +1,30 @@
+{
+  "choices": [
+    {
+      "finish_reason": "stop",
+      "index": 0,
+      "logprobs": null,
+      "message": {
+        "content": "9+9=18哦~\n如果用凑十法计算的话，可以把其中一个9拆成1+8，先算9+1=10，再算10+8=18，也可以直接用乘法口诀“二九十八”得到结果~",
+        "reasoning_content": "\n用户现在问9+9等于几，首先这是个基础的加法题对吧，9加9的话，算的话可以凑十，9加1是10，剩下的9减1是8，10加8就是18？不对不对不对等下，哦不对9加9就是18啊，对的，然后要不要稍微说下计算方法？比如凑十法：把其中一个9拆成1和8，9+1=10，10+8=18，或者也可以想二九十八对吧，乘法口诀也能算。所以结果是18对吧，没错。然后回答得清楚一点就行。",
+        "role": "assistant"
+      }
+    }
+  ],
+  "created": 1780823695,
+  "id": "0217808236883834c820fca0bf6a1c3132c1d42bdd0dd3fc29fab",
+  "model": "doubao-seed-2-0-pro-260215",
+  "service_tier": "default",
+  "object": "chat.completion",
+  "usage": {
+    "completion_tokens": 204,
+    "prompt_tokens": 54,
+    "total_tokens": 258,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    },
+    "completion_tokens_details": {
+      "reasoning_tokens": 144
+    }
+  }
+}

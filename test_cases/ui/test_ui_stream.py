@@ -14,11 +14,10 @@ LAST_MESSAGE_XPATH = "(//div[contains(@class,'prose')])[last()]"
 def click_send(driver, timeout=15):
     loc = (By.XPATH, SEND_BUTTON_XPATH)
     btn = WebDriverWait(driver, timeout).until(EC.presence_of_element_located(loc))
-    driver.execute_script("arguments[0].scrollIntoView(true);", btn)
+    driver.execute_script("arguments[0].scrollIntoView(true);", btn)    #表示传递给 JavaScript 脚本的第一个参数，这里是 btn（按钮元素）；是 JavaScript 的方法，用于将元素滚动到视图中。true 表示将元素滚动到视图的顶部
     time.sleep(0.3)
     driver.execute_script("arguments[0].click();", btn)
 
-# 只加了这个函数，替换原来的长等待
 def wait_stream_finish(driver, max_wait=30):
     max_wait_sec = max_wait
     start = time.time()
@@ -54,7 +53,6 @@ def test_ui_stream_rendering(init_driver, doubao_config):
             click_send(driver)
 
         with allure.step("等待AI输出完成"):
-            # 只改了这里，替换原来的长等待
             wait_stream_finish(driver)
 
         with allure.step("校验结果"):

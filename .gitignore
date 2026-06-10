@@ -36,6 +36,5 @@ geckodriver.exe
 
 # 忽略 reports 下所有东西
 reports/*
-
 # 但单独保留这张截图
 !reports/allure-report-screenshot.png

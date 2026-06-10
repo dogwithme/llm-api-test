@@ -1,0 +1,30 @@
+{
+  "choices": [
+    {
+      "finish_reason": "stop",
+      "index": 0,
+      "logprobs": null,
+      "message": {
+        "content": "你好呀😊~ 不管是有知识疑问想要咨询、想找生活/学习相关的实用攻略、还是单纯想唠唠嗑、 brainstorm 新奇点子，都可以随时和我说哦！",
+        "reasoning_content": "\n用户现在说“你好”，首先我得友好回应对吧，首先回你好呀，然后可以说如果有什么问题，不管是生活疑问、知识科普、还是想聊天、找攻略、出点子啥的都可以跟我说，让用户知道我能帮啥忙对吧。语气要亲切点，别太生硬。\n哦对了，就自然点，比如：“你好呀😊~ 不管是有知识疑问想要咨询、想找生活/学习相关的实用攻略、还是单纯想唠唠嗑、 brainstorm 新奇点子，都可以随时和我说哦！”\n对，这样就挺好，挺自然的，也告诉用户我能提供的帮助了。",
+        "role": "assistant"
+      }
+    }
+  ],
+  "created": 1780823709,
+  "id": "021780823703017f3d1fdaa5e961ea5a6156e3d27d6a9853eceaf",
+  "model": "doubao-seed-2-0-pro-260215",
+  "service_tier": "default",
+  "object": "chat.completion",
+  "usage": {
+    "completion_tokens": 194,
+    "prompt_tokens": 51,
+    "total_tokens": 245,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    },
+    "completion_tokens_details": {
+      "reasoning_tokens": 151
+    }
+  }
+}

@@ -20,10 +20,10 @@ def click_send(driver, timeout=20):
     except Exception:
         driver.execute_script("arguments[0].click();", btn)
 
-@allure.feature("Web端UI测试(自有模型)")
+@allure.feature("Web端UI测试")
 @allure.story("异常场景前端提示")
 @pytest.mark.ui
-@pytest.mark.order(3) #只新增这一行
+@pytest.mark.order(3)
 def test_ui_error_prompt(init_driver, doubao_config):
     driver = init_driver
     try:

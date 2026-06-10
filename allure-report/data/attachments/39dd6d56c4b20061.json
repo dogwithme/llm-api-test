@@ -1,0 +1,10 @@
+{
+  "model": "ep-20260527211839-psk77",
+  "messages": [
+    {
+      "role": "user",
+      "content": "写一篇200字的软件测试面试经验"
+    }
+  ],
+  "max_tokens": 100
+}
