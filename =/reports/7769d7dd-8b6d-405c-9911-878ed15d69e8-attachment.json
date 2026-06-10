@@ -1,0 +1,40 @@
+{
+  "choices": [
+    {
+      "finish_reason": "tool_calls",
+      "index": 0,
+      "logprobs": null,
+      "message": {
+        "content": "",
+        "reasoning_content": "\n用户现在问的是今天北京的天气怎么样，我需要调用get_weather工具对吧，参数是city，值是北京，对吧？那按照要求格式来写。首先函数名是get_weather，参数city是字符串类型，所以string=\"true\"，内容是北京。对吧？那组合起来就是：\n<seed:tool_call><function name=\"get_weather\"><parameter name=\"city\" string=\"true\">北京</parameter></function></seed:tool_call>\n对没错，就这个。",
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "function": {
+              "arguments": "{\"city\": \"北京\"}",
+              "name": "get_weather"
+            },
+            "id": "call_kyhc8284lk8wm2fwo5pztb2a",
+            "type": "function"
+          }
+        ]
+      }
+    }
+  ],
+  "created": 1780821377,
+  "id": "021780821371813d124c43c387314b34f4e9e457720e33974d153",
+  "model": "doubao-seed-2-0-pro-260215",
+  "service_tier": "default",
+  "object": "chat.completion",
+  "usage": {
+    "completion_tokens": 145,
+    "prompt_tokens": 394,
+    "total_tokens": 539,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    },
+    "completion_tokens_details": {
+      "reasoning_tokens": 111
+    }
+  }
+}

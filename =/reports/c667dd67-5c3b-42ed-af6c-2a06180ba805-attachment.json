@@ -1,0 +1,30 @@
+{
+  "choices": [
+    {
+      "finish_reason": "stop",
+      "index": 0,
+      "logprobs": null,
+      "message": {
+        "content": "哈哈收到你满满的问好啦🥰！我在的~\n不管是有问题想咨询、想唠嗑聊天，还是需要找资料、写文案、出主意，都可以随时告诉我哦😉",
+        "reasoning_content": "\n用户发了超级多“你好”，首先得回应得友好热情一点对吧？首先得接住用户的热情，然后可以问问用户有什么需要帮忙的，比如是有问题要解答，还是想聊聊天，或者有什么需求都可以说对吧？语气要亲切，不能太生硬。\n哦对，首先可以说“哈哈收到你满满的问好啦🥰！我在的~ 不管是有问题想咨询、想唠嗑聊天，还是需要找资料、写文案、出主意，都可以随时告诉我哦😉” 就很自然，对吧？符合友好的感觉，也引导用户说具体的需求。",
+        "role": "assistant"
+      }
+    }
+  ],
+  "created": 1780821371,
+  "id": "021780821363121f49357381ad84b476d8c8001bb9a349dd9b834",
+  "model": "doubao-seed-2-0-pro-260215",
+  "service_tier": "default",
+  "object": "chat.completion",
+  "usage": {
+    "completion_tokens": 184,
+    "prompt_tokens": 40049,
+    "total_tokens": 40233,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    },
+    "completion_tokens_details": {
+      "reasoning_tokens": 140
+    }
+  }
+}

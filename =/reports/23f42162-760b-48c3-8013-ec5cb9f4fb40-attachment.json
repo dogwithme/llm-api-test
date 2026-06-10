@@ -1,0 +1,30 @@
+{
+  "choices": [
+    {
+      "finish_reason": "stop",
+      "index": 0,
+      "logprobs": null,
+      "message": {
+        "content": "东风裹着浅草和桃花的甜香拂过街头，催得柳梢爆了嫩黄的芽，连檐下刚归巢的燕子，都叽叽喳喳叫得格外轻快。",
+        "reasoning_content": "\n用户现在需要写一句描写春天的话，对吧，首先要生动，有春天的元素对吧？比如春风啊，嫩芽啊，樱花啊，还有风里的味道？哦对，然后不要碰到那个STOP对吧？等下，就写自然点的，比如“软乎乎的东风拂过堤岸，吹得柳丝冒出嫩黄的新芽，也把樱花瓣吹得落满了行人的肩头，空气里全是清甜的草木香。”不对？等下有没有问题？哦对，就正常写，不要有那个STOP相关的，不对，用户说看到###STOP###就立刻停止，哦现在用户没放那个对吧？哦不对，现在就写一句描写春天的对吧？对，就写得有画面感的。哦等下再润色下？比如“东风裹着浅草和桃花的甜香拂过街头，催得柳梢爆了嫩黄的芽，连檐下刚归巢的燕子，都叽叽喳喳叫得格外轻快。”对，这个就挺好的，对吧？没有问题，也符合要求，对吧？",
+        "role": "assistant"
+      }
+    }
+  ],
+  "created": 1780821274,
+  "id": "02178082126540309d3ad42231bc9609aa73992c6c59b4ec78300",
+  "model": "doubao-seed-2-0-pro-260215",
+  "service_tier": "default",
+  "object": "chat.completion",
+  "usage": {
+    "completion_tokens": 282,
+    "prompt_tokens": 64,
+    "total_tokens": 346,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    },
+    "completion_tokens_details": {
+      "reasoning_tokens": 240
+    }
+  }
+}

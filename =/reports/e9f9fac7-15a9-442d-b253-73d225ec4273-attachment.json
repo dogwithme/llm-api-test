@@ -1,0 +1,30 @@
+{
+  "choices": [
+    {
+      "finish_reason": "stop",
+      "index": 0,
+      "logprobs": null,
+      "message": {
+        "content": "我们上一步算出9+9的结果是18，再乘以2的话就是：18×2=36。\n你也可以用巧算思路哦：(9+9)×2其实就是4个9相加，根据乘法口诀“四九三十六”，也能直接得到结果36~",
+        "reasoning_content": "\n用户现在问的是刚才的9+9的结果再乘以二等于多少对吧？首先之前算的9+9是18，那18乘以2的话就是36对吧？哦不对等下，也可以先理解成(9+9)*2对吧？对，先算括号里是18，乘2就是36，最好也可以说下计算思路？比如也可以看成9*4=36？不对不对，(9+9)*2就是18*2=36，说清楚就行，要易懂对吧。哦对，先承接上一步的结果，上一步9+9得18，18乘以2就是36，要是巧算的话其实也可以看成两个9加起来再乘2，就是4个9相加，四九三十六也是对的，这样也可以给用户说下两种思路？对，就这么答。\n",
+        "role": "assistant"
+      }
+    }
+  ],
+  "created": 1780821552,
+  "id": "021780821543763b9f1f8d82739748c57f1ca9984b4fb5e27c20b",
+  "model": "doubao-seed-2-0-pro-260215",
+  "service_tier": "default",
+  "object": "chat.completion",
+  "usage": {
+    "completion_tokens": 266,
+    "prompt_tokens": 119,
+    "total_tokens": 385,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    },
+    "completion_tokens_details": {
+      "reasoning_tokens": 197
+    }
+  }
+}

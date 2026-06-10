@@ -1,0 +1,30 @@
+{
+  "choices": [
+    {
+      "finish_reason": "stop",
+      "index": 0,
+      "logprobs": null,
+      "message": {
+        "content": "你好呀😊！很高兴认识你，不管是想咨询问题、聊天唠嗑、找资料参考还是需要出主意写文案，都可以随时和我说哦~",
+        "reasoning_content": "\n用户现在说“你好”，我得友好回应对吧，首先回个你好呀，然后可以问问有什么我能帮忙的，不管是想问问题、唠嗑、找资料还是想点子啥的都可以，语气亲切点就行。比如：“你好呀😊！很高兴认识你，不管是想咨询问题、聊天唠嗑、找资料参考还是需要出主意写文案，都可以随时和我说哦~”对，这样就挺自然的。",
+        "role": "assistant"
+      }
+    }
+  ],
+  "created": 1780821555,
+  "id": "021780821552732c57e78ec35a4c62cb30347d58d08558f51c571",
+  "model": "doubao-seed-2-0-pro-260215",
+  "service_tier": "default",
+  "object": "chat.completion",
+  "usage": {
+    "completion_tokens": 140,
+    "prompt_tokens": 51,
+    "total_tokens": 191,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    },
+    "completion_tokens_details": {
+      "reasoning_tokens": 104
+    }
+  }
+}

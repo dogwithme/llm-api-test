@@ -30,10 +30,12 @@ chromedriver.exe
 geckodriver.exe
 *.crx
 
-# Allure 生成报告（完全忽略，不提交）
+# Allure报告目录全屏蔽
 allure-report/
 allure-results/
 
-# reports目录：整体忽略，仅保留截图文件
-reports/*
+# reports目录：忽略所有子目录、附件文件，只保留根目录截图
+reports/*/
+reports/*.json
+reports/*.txt
 !reports/allure-report-screenshot.png
