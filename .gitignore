@@ -10,10 +10,12 @@ env/
 *.iws
 *.ipr
 
-# 测试报告
-reports/
-allure-results/
-*.html
+# 缓存编译文件
+__pycache__/
+*.pyc
+.pytest_cache/
+*.tmp
+*.temp
 
 # 日志文件
 *.log
@@ -23,18 +25,15 @@ logs/
 .DS_Store
 Thumbs.db
 
-# 临时文件
-*.tmp
-*.temp
-__pycache__/
-*.pyc
-
-# Selenium相关
+# 驱动文件
 chromedriver.exe
 geckodriver.exe
 *.crx
 
-# 忽略 reports 下所有东西
+# Allure 生成报告（完全忽略，不提交）
+allure-report/
+allure-results/
+
+# reports目录：整体忽略，仅保留截图文件
 reports/*
-# 但单独保留这张截图
 !reports/allure-report-screenshot.png
