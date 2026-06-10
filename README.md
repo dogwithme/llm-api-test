@@ -13,7 +13,7 @@
 - pytest-rerunfailures 16.1（失败自动重试，解决网络波动问题）
 
 ## 测试报告
-![Allure测试报告](./reports/allure-report-screenshot.png)
+![Allure测试报告](./allure-report-screenshot.png)
 
 ## 测试范围
 1. **API接口测试**
