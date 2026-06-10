@@ -36,7 +36,7 @@ def wait_stream_finish(driver, max_wait=30):
 @allure.story("流式输出前端展示")
 @pytest.mark.ui
 @pytest.mark.smoke
-@pytest.mark.order(1)  # 👈 第一个跑
+@pytest.mark.order(1)
 def test_ui_stream_rendering(init_driver, doubao_config):
     driver = init_driver
     pass_flag = False
